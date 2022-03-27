@@ -1,0 +1,201 @@
+<div class="col-12 m-0 p-0">
+    <div class="page-title-box">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-sm-6">
+                    <div class="page-title">
+                        <h4>Wisata</h4>
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="/wisata">Wisata</a></li>
+                            <li class="breadcrumb-item active">Tambah</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="container-fluid">
+        <div class="page-content-wrapper">
+            <div class="col-12 m-0 p-0">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="header-title">Tambah Wisata</h4>
+                            <% if(error) { %>
+                                <div class="alert alert-warning m-2" role="alert">
+                                    <ul>
+                                        <% error.forEach((e, i)=> { %>
+                                            <li>
+                                                <%- e.msg %>
+                                            </li>
+                                            <% }) %>
+                                    </ul>
+                                </div>
+                                <% } %>
+
+                                    <form action="/user/add" method="POST" enctype="multipart/form-data">
+                                        <div class="row mb-3">
+                                            <label for="example-text-input" class="col-sm-2 col-form-label">Nama</label>
+                                            <div class="col-sm-10">
+                                                <input class="form-control" type="text" name="nama" required>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label for="example-text-input" class="col-sm-2 col-form-label">Deskripsi</label>
+                                            <div class="col-sm-10" id="cont_alamat">
+                                                <div class="col-12 mb-1">
+                                                    <select class="select2 form-control" id="province" name="province" required>
+                                                        <option value="" selected>-- Select Province --</option>
+                                                        <% alamat.provinces.forEach(province => { %>
+                                                            <option value="<%- province.id %>"><%- province.name %></option>
+                                                        <% }); %> 
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 mb-1" id="cont_regency">
+                                                    <select class="select2 form-control" id="regency" name="regency" required disabled>
+                                                        <option value="" selected>-- Select Regency --</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 mb-1" id="cont_district">
+                                                    <select class="select2 form-control" id="district" name="district" required disabled>
+                                                        <option value="" selected>-- Select District --</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 mb-1" id="cont_village">
+                                                    <select class="select2 form-control" id="village" name="village" required disabled>
+                                                        <option value="" selected>-- Select Village --</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label for="example-text-input" class="col-sm-2 col-form-label">Deskripsi</label>
+                                            <div class="col-sm-10">
+                                                <textarea class="form-control" id="exampleFormControlTextarea1" name="description" rows="3"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label for="example-text-input" class="col-sm-2 col-form-label">Lat</label>
+                                            <div class="col-sm-10">
+                                                <input class="form-control" type="number" name="lat" min="0" step="any">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label for="example-text-input" class="col-sm-2 col-form-label">Lng</label>
+                                            <div class="col-sm-10">
+                                                <input class="form-control" type="number" name="lat" min="0" step="any">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label for="example-text-input" class="col-sm-2 col-form-label">Gambar Sampul</label>
+                                            <div class="col-sm-10">
+                                            <input class="form-control form-control-sm" id="formFileSm" name="image" type="file">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="submit" class="btn btn-sm btn-success" value="Simpan">
+                                        </div>
+                                    </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+<script>
+    $(document).ready(function () {
+        $('.select2').select2();
+    });
+
+    $('#province').on('change', async function () {
+        let id_province = $('#province').val()
+        if(id_province != '')
+        {
+            $.ajax({
+                type: 'POST',
+                url: '/wisata/get_many_regencies',
+                data: {
+                    id_province
+                },
+                success: function(regencies) {
+                    console.log(regencies);
+                    $('#regency').removeAttr('disabled')
+                    let regencies_option = '<option value="" selected>-- Select Regency --</option>'
+                    regencies.forEach(regency => {
+                        regencies_option += '<option value="' + regency.id + '">' + regency.name + '</option>'
+                    })
+                    $('#regency').html(regencies_option)
+                }
+            });
+        }
+        else
+        {
+            $('#regency').attr('disabled', 'true')
+            $('#regency').html('<option value="" selected>-- Select Regency --</option>')
+            $('#district').attr('disabled', 'true')
+            $('#district').html('<option value="" selected>-- Select District --</option>')
+            $('#village').attr('disabled', 'true')
+            $('#village').html('<option value="" selected>-- Select Village --</option>')
+        }
+    })
+    $('#regency').on('change', async function () {
+        let id_regency = $('#regency').val()
+        if(id_regency != '')
+        {
+            $.ajax({
+                type: 'POST',
+                url: '/wisata/get_many_district',
+                data: {
+                    id_regency
+                },
+                success: function(district) {
+                    console.log(district)
+                    $('#district').removeAttr('disabled')
+                    let district_option = '<option value="" selected>-- Select Distric --</option>'
+                    district.forEach(district => {
+                        district_option += '<option value="'+ district.id +'">' + district.name + '</option>'
+                    })
+                    $('#district').html(district_option);
+                }
+            })
+        }
+        else {
+            $('#district').attr('disabled', 'true')
+            $('#district').html('<option value="" selected>-- Select District --</option>')
+            $('#village').attr('disabled', 'true')
+            $('#village').html('<option value="" selected>-- Select Village --</option>')
+        }
+    })
+    $('#district').on('change', async function() {
+        let id_district = $('#district').val()
+        if(id_district != '')
+        {
+            $.ajax({
+                type: 'POST',
+                url: '/wisata/get_many_village',
+                data: {
+                    id_district
+                },
+                success: function(village) {
+                    console.log(village)
+                    $('#village').removeAttr('disabled')
+                    let village_option = '<option value="" selected>-- Select Village --</option>'
+                    village.forEach(vil => {
+                        village_option += '<option value="'+vil.id+'">'+vil.name+'</option>'
+                    });
+                    $('#village').html(village_option)
+                }
+            })
+        }
+        else {
+            $('#village').attr('disabled', 'true')
+            $('#village').html('<option value="" selected>-- Select Village --</option>')
+        }
+    })
+</script>

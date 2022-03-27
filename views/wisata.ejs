@@ -1,0 +1,82 @@
+<div class="col-12 m-0 p-0">
+    <div class="page-title-box">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-sm-6">
+                    <div class="page-title">
+                        <h4>Wisata</h4>
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Wisata</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="float-end d-none d-sm-block">
+                        <a href="/wisata/add" class="btn btn-sm btn-success"><i class="fas fa-user-plus"></i> Add User</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="container-fluid">
+        <div class="page-content-wrapper">
+            <div class="col-12 m-0 p-0">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="header-title">Wisata</h4>
+                            <% if(msg[0] !=null) { %>
+                                <div class="alert alert-<%- msg[0].type %> m-2" role="alert">
+                                    <%- msg[0].msg %>
+                                </div>
+                                <% } %>
+                                    <div class="table-responsive">
+                                        <table class="table mb-0">
+
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Nama</th>
+                                                    <th>Description</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% wisatas.forEach((wisata, i)=> {%>
+                                                    <tr>
+                                                        <th scope="row">
+                                                            <%= i+1 %>
+                                                        </th>
+                                                        <td>
+                                                            <%= wisata.nama %>
+                                                        </td>
+                                                        <td>
+                                                            <%= wisata.description %>
+                                                        </td>
+                                                        <td>
+                                                            <a href="/user/edit/<%= user._id %>"
+                                                                class="btn btn-sm btn-warning"><i
+                                                                    class="fas fa-user-edit"></i></a>
+                                                            <form class="inline" action="/user?_method=DELETE"
+                                                                method="POST">
+                                                                <input type="hidden" name="id" value="<%= user._id %>">
+                                                                <button type="submit" class="btn btn-sm btn-danger"><i
+                                                                        class="fas fa-user-minus"></i></button>
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                    <% }) %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

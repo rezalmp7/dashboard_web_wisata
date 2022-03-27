@@ -1,0 +1,77 @@
+<div class="col-12 m-0 p-0">
+    <div class="page-title-box">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-sm-6">
+                    <div class="page-title">
+                        <h4>Users</h4>
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="/user">Users</a></li>
+                            <li class="breadcrumb-item active">Edit</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+    
+    <div class="container-fluid">
+        <div class="page-content-wrapper">
+            <div class="col-12 m-0 p-0">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="header-title">Edit User</h4>
+                            <% if(error[0] !=null) { %>
+                                <div class="alert alert-<%- error[0].type %> m-2" role="alert">
+                                    <ul>
+                                    <% error[0].msg.forEach((e, i) => { %>
+                                        <li><%- e.msg %></li>
+                                    <% }) %>
+                                    </ul>
+                                </div>
+                            <% } %>
+                            <form action="/user?_method=PUT" method="POST">
+                                <input type="hidden" name="id" value="<%- user._id %>">
+                                <input type="hidden" name="username_lama" value="<%- user.username %>">
+                                <div class="row mb-3">
+                                    <label for="example-text-input" class="col-sm-2 col-form-label">Nama</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" type="text" name="nama" value="<%- user.nama %>">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="example-text-input" class="col-sm-2 col-form-label">Username</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" type="text" name="username" value="<%- user.username %>">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="example-text-input" class="col-sm-2 col-form-label">Ganti Password</label>
+                                    <div class="col-sm-10">
+                                        <input type="hidden" name="password_lama" value="<%- user.password %>">
+                                        <input class="form-control" type="password" name="password">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">Level</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-select" aria-label="Default select example" name="level" required>
+                                            <option selected="">--Select Level--</option>
+                                            <option value="admin" <% if (user.level == 'admin') { %>selected<% } %>>Admin</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <input type="submit" class="btn btn-sm btn-success" value="Simpan">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
